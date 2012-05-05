@@ -20,6 +20,7 @@ module Sprockets
         next unless config.assets.enabled
 
         require 'sprockets'
+        FileUtils.mkdir_p('tmp/cache/assets')
 
         app.assets = Sprockets::Environment.new(app.root.to_s) do |env|
           env.version = ::Rails.env + "-#{config.assets.version}"
@@ -42,6 +43,9 @@ module Sprockets
         if File.exist?(path)
           config.assets.digests = YAML.load_file(path)
         end
+
+        config.assets.paths.unshift(*config.paths.vendor.assets.existent_directories)
+        config.assets.paths.unshift(*config.paths.app.assets.existent_directories)
 
         ActiveSupport.on_load(:action_view) do
           include ::Sprockets::Rails::Helpers::RailsHelper

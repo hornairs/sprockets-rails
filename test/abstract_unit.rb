@@ -74,7 +74,35 @@ module TestHelpers
       end
 
       add_to_config 'config.secret_token = "3b7cd727ee24e8444053437c36cc66c4"; config.session_store :cookie_store, :key => "_myapp_session"; config.active_support.deprecation = :log'
+
+      add_to_env_config 'production', <<-RUBY
+
+        config.assets.enabled = true
+
+        # Compress JavaScripts and CSS.
+        config.assets.compress = true
+
+        # Don't fallback to assets pipeline if a precompiled asset is missed.
+        config.assets.compile = false
+
+        # Generate digests for assets URLs.
+        config.assets.digest = true
+      RUBY
+
+      add_to_env_config 'development', <<-RUBY
+
+        config.assets.enabled = true
+
+        # Do not compress assets.
+        config.assets.compress = false
+
+        config.assets.compile = true
+
+        # Expands the lines which load the assets.
+        config.assets.debug = true
+      RUBY
     end
+
 
     def teardown_app
       ENV['RAILS_ENV'] = @prev_rails_env if @prev_rails_env
