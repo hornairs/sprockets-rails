@@ -95,11 +95,11 @@ namespace :assets do
   end
 
   task :environment do
-    if ::Rails.application.config.assets.initialize_on_precompile
-      Rake::Task["environment"].invoke
-    else
-      ::Rails.application.initialize!(:assets)
-      Sprockets::Rails::Bootstrap.new(Rails.application).run
-    end
+    #if ::Rails.application.config.assets.initialize_on_precompile
+    Rake::Task["environment"].invoke
+    #else
+      #::Rails.application.initialize!
+      #Sprockets::Rails::Bootstrap.new(Rails.application).run
+    #end
   end
 end
