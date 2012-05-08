@@ -40,7 +40,6 @@ module ApplicationTests
     test "assets do not require compressors until it is used" do
       app_file "app/assets/javascripts/demo.js.erb", "<%= :alert %>();"
       add_to_env_config "production", "config.assets.compile = true"
-
       ENV["RAILS_ENV"] = "production"
       require "#{app_path}/config/environment"
 
@@ -223,29 +222,29 @@ module ApplicationTests
       assert_match(/app.js isn't precompiled/, last_response.body)
     end
 
-    test "assets raise AssetNotPrecompiledError when manifest file is present and requested file isn't precompiled if digest is disabled" do
-      app_file "app/views/posts/index.html.erb", "<%= javascript_include_tag 'app' %>"
-      add_to_config "config.assets.compile = false"
+    #test "assets raise AssetNotPrecompiledError when manifest file is present and requested file isn't precompiled if digest is disabled" do
+      #app_file "app/views/posts/index.html.erb", "<%= javascript_include_tag 'app' %>"
+      #add_to_config "config.assets.compile = false"
 
-      app_file "config/routes.rb", <<-RUBY
-        AppTemplate::Application.routes.draw do
-          get '/posts', :to => "posts#index"
-        end
-      RUBY
+      #app_file "config/routes.rb", <<-RUBY
+        #AppTemplate::Application.routes.draw do
+          #get '/posts', :to => "posts#index"
+        #end
+      #RUBY
 
-      ENV["RAILS_ENV"] = "development"
-      precompile!
+      #ENV["RAILS_ENV"] = "development"
+      #precompile!
 
-      # Create file after of precompile
-      app_file "app/assets/javascripts/app.js", "alert();"
+      ## Create file after of precompile
+      #app_file "app/assets/javascripts/app.js", "alert();"
 
-      require "#{app_path}/config/environment"
-      class ::PostsController < ActionController::Base ; end
+      #require "#{app_path}/config/environment"
+      #class ::PostsController < ActionController::Base ; end
 
-      get '/posts'
-      assert_match(/AssetNotPrecompiledError/, last_response.body)
-      assert_match(/app.js isn't precompiled/, last_response.body)
-    end
+      #get '/posts'
+      #assert_match(/AssetNotPrecompiledError/, last_response.body)
+      #assert_match(/app.js isn't precompiled/, last_response.body)
+    #end
 
     test "precompile properly refers files referenced with asset_path and and run in the provided RAILS_ENV" do
       app_file "app/assets/stylesheets/application.css.erb", "<%= asset_path('rails.png') %>"
@@ -381,8 +380,8 @@ module ApplicationTests
 
       # the debug_assets params isn't used if compile is off
       get '/posts?debug_assets=true'
-      assert_match(/<script src="\/assets\/application-([0-z]+)\.js"><\/script>/, last_response.body)
-      assert_no_match(/<script src="\/assets\/xmlhr-([0-z]+)\.js"><\/script>/, last_response.body)
+      assert_match(/<script src="\/assets\/application-([0-z]+)\.js" type="text\/javascript"><\/script>/, last_response.body)
+      assert_no_match(/<script src="\/assets\/xmlhr-([0-z]+)\.js" type="text\/javascript"><\/script>/, last_response.body)
     end
 
     test "assets aren't concatened when compile is true is on and debug_assets params is true" do
@@ -396,8 +395,8 @@ module ApplicationTests
       class ::PostsController < ActionController::Base ; end
 
       get '/posts?debug_assets=true'
-      assert_match(/<script src="\/assets\/application-([0-z]+)\.js\?body=1"><\/script>/, last_response.body)
-      assert_match(/<script src="\/assets\/xmlhr-([0-z]+)\.js\?body=1"><\/script>/, last_response.body)
+      assert_match(/<script src="\/assets\/application-([0-z]+)\.js\?body=1" type="text\/javascript"><\/script>/, last_response.body)
+      assert_match(/<script src="\/assets\/xmlhr-([0-z]+)\.js\?body=1" type="text\/javascript"><\/script>/, last_response.body)
     end
 
     test "assets can access model information when precompiling" do
@@ -435,7 +434,7 @@ module ApplicationTests
     end
 
     test "digested assets are not mistakenly removed" do
-      app_file "app/assets/application.js", "alert();"
+      app_file "app/assets/javascripts/application.js", "alert();"
       add_to_config "config.assets.compile = true"
       add_to_config "config.assets.digest = true"
 
@@ -479,16 +478,6 @@ module ApplicationTests
       precompile!
 
       assert_match 'src="//example.com/assets/rails.png"', File.read("#{app_path}/public/assets/image_loader.js")
-    end
-
-    test "asset paths should use RAILS_RELATIVE_URL_ROOT by default" do
-      ENV["RAILS_RELATIVE_URL_ROOT"] = "/sub/uri"
-
-      app_file "app/assets/javascripts/app.js.erb", 'var src="<%= image_path("rails.png") %>";'
-      add_to_config "config.assets.precompile = %w{app.js}"
-      precompile!
-
-      assert_match 'src="/sub/uri/assets/rails.png"', File.read("#{app_path}/public/assets/app.js")
     end
 
     test "html assets are compiled when executing precompile" do
