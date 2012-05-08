@@ -7,6 +7,7 @@ require 'action_controller'
 require 'mocha'
 require 'active_support/dependencies'
 require 'action_controller/vendor/html-scanner'
+require './kernel_extensions'
 
 FIXTURE_LOAD_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 FIXTURES = Pathname.new(FIXTURE_LOAD_PATH)

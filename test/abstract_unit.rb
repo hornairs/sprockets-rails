@@ -9,6 +9,7 @@ require 'rails/generators'
 require "active_support/testing/isolation"
 require "active_support/testing/declarative"
 require "active_support/core_ext/kernel/reporting"
+require File.expand_path(File.dirname(__FILE__) + "/kernel_extensions")
 
 module TestHelpers
   module Paths
