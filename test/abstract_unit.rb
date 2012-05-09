@@ -74,7 +74,19 @@ module TestHelpers
         end
       end
 
-      add_to_config 'config.secret_token = "3b7cd727ee24e8444053437c36cc66c4"; config.session_store :cookie_store, :key => "_myapp_session"; config.active_support.deprecation = :log'
+      app_file "app/assets/images/rails.png", "image"
+
+      add_to_config <<-RUBY
+        # Enable the asset pipeline.
+        config.assets.enabled = true
+
+        # Version of your assets, change this if you want to expire all your assets.
+        config.assets.version = '1.0'
+
+        config.secret_token = "3b7cd727ee24e8444053437c36cc66c4"
+        config.session_store :cookie_store, :key => "_myapp_session"
+        config.active_support.deprecation = :log
+      RUBY
 
       add_to_env_config 'production', <<-RUBY
 
