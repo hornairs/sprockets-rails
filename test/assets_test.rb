@@ -278,7 +278,7 @@ module ApplicationTests
       assert_not_equal asset_path, assets["application.css"]
     end
 
-    test "precompile appends the md5 hash to files referenced with asset_path and run in production as default even using RAILS_GROUPS=assets" do
+    test "precompile appends the md5 hash to files referenced with asset_path and run in production as default" do
       app_file "app/assets/stylesheets/application.css.erb", "<%= asset_path('rails.png') %>"
       add_to_config "config.assets.compile = true"
 

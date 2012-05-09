@@ -3,8 +3,7 @@ require "fileutils"
 namespace :assets do
   def ruby_rake_task(task, fork = true)
     env    = ENV['RAILS_ENV'] || 'production'
-    groups = ENV['RAILS_GROUPS'] || 'assets'
-    args   = [$0, task,"RAILS_ENV=#{env}","RAILS_GROUPS=#{groups}"]
+    args   = [$0, task,"RAILS_ENV=#{env}"]
     args << "--trace" if Rake.application.options.trace
     if $0 =~ /rake\.bat\Z/i
       Kernel.exec $0, *args
@@ -17,7 +16,7 @@ namespace :assets do
   # and/or no explicit environment - we have to reinvoke rake to
   # execute this task.
   def invoke_or_reboot_rake_task(task)
-    if ENV['RAILS_GROUPS'].to_s.empty? || ENV['RAILS_ENV'].to_s.empty?
+    if ENV['RAILS_ENV'].to_s.empty?
       ruby_rake_task task
     else
       Rake::Task[task].invoke
@@ -95,11 +94,6 @@ namespace :assets do
   end
 
   task :environment do
-    #if ::Rails.application.config.assets.initialize_on_precompile
     Rake::Task["environment"].invoke
-    #else
-      #::Rails.application.initialize!
-      #Sprockets::Rails::Bootstrap.new(Rails.application).run
-    #end
   end
 end
