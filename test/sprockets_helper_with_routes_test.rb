@@ -48,12 +48,12 @@ class SprocketsHelperWithRoutesTest < ActiveSupport::TestCase
   end
 
   test "javascript_include_tag with a named_route named asset_path" do
-    assert_match %r{<script src="/assets/application-[0-9a-f]+.js"></script>},
+    assert_match %r{<script src="/assets/application-[0-9a-f]+.js" type="text/javascript"></script>},
       javascript_include_tag(:application)
   end
 
   test "stylesheet_link_tag with a named_route named asset_path" do
-    assert_match %r{<link href="/assets/application-[0-9a-f]+.css" media="screen" rel="stylesheet" />},
+    assert_match %r{<link href="/assets/application-[0-9a-f]+.css" media="screen" rel="stylesheet" type="text/css" />},
       stylesheet_link_tag(:application)
   end
 
