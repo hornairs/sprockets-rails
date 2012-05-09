@@ -5,6 +5,7 @@ module Sprockets
     module Helpers
       module RailsHelper
         extend ActiveSupport::Concern
+        include ActionView::Helpers::TagHelper
         include ActionView::Helpers::AssetTagHelper
 
         def asset_paths
