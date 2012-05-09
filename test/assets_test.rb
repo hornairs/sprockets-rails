@@ -298,7 +298,7 @@ module ApplicationTests
       precompile!
       require "#{app_path}/config/environment"
 
-      get "/assets/#{URI.parser.escape(filename)}"
+      get "/assets/#{URI::Parser.new.escape(filename)}"
       assert_match "not a image really", last_response.body
       assert File.exists?("#{app_path}/public/assets/#{filename}")
     end
