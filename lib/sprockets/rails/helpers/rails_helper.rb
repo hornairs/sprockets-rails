@@ -141,7 +141,14 @@ module Sprockets
               end
               return logical_path
             else
-              raise AssetNotPrecompiledError.new("#{logical_path} isn't precompiled")
+              exception = AssetNotPrecompiledError.new("#{logical_path} isn't precompiled")
+              case ::Rails.application.config.assets.not_precompiled_errors
+              when :warn
+                ::Rails.logger.warn "[Assets] #{exception.to_s}"
+              else
+                raise exception
+              end
+              logical_path
             end
           end
 

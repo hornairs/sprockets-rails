@@ -20,6 +20,7 @@ module Rails
         @assets.css_compressor           = nil
         @assets.initialize_on_precompile = true
         @assets.logger                   = nil
+        @assets.not_precompiled_errors   = :throw
       end
       alias_method_chain :initialize, :assets
 
