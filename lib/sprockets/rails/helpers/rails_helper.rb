@@ -15,6 +15,7 @@ module Sprockets
             paths.asset_digests     = asset_digests
             paths.compile_assets    = compile_assets?
             paths.digest_assets     = digest_assets?
+            paths.asset_id          = asset_id
             paths
           end
         end
@@ -95,6 +96,10 @@ module Sprockets
         # +config.assets.prefix+ instead.
         def asset_prefix
           ::Rails.application.config.assets.prefix
+        end
+
+        def asset_id
+          ::Rails.application.config.assets.asset_id
         end
 
         def asset_digests

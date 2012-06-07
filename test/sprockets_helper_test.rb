@@ -145,6 +145,15 @@ class SprocketsHelperTest < ActiveSupport::TestCase
       path_to_image("logo.png")
   end
 
+  test "image_path with asset_id" do
+    @config.assets.asset_id = "100000"
+    assert_match %r{/assets/logo-[0-9a-f]+.png\?100000},
+      image_path("logo.png")
+
+    assert_match %r{/assets/logo-[0-9a-f]+.png\?100000},
+      path_to_image("logo.png")
+  end
+
   test "font_path" do
     assert_match %r{/assets/font-[0-9a-f]+.ttf},
       font_path("font.ttf")

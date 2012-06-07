@@ -7,6 +7,7 @@ module ActionView
     URI_REGEXP = %r{^[-a-z]+://|^cid:|^//}
 
     attr_reader :config, :controller
+    attr_accessor :asset_id
 
     def initialize(config, controller = nil)
       @config = config
@@ -29,6 +30,7 @@ module ActionView
       source = rewrite_asset_path(source, dir, options)
       source = rewrite_relative_url_root(source, relative_url_root)
       source = rewrite_host_and_protocol(source, options[:protocol])
+      source = rewrite_asset_id(source) if asset_id.present?
       source
     end
 
@@ -70,6 +72,10 @@ module ActionView
         end
       end
       host ? "#{host}#{source}" : source
+    end
+
+    def rewrite_asset_id(source)
+      source + "?#{asset_id}"
     end
 
     def compute_protocol(protocol)
